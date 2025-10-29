@@ -18,30 +18,83 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+/*******
+ * <p> Title: ViewSearchPosts Class. </p>
+ * 
+ * <p> Description: The Java/FX-based ViewSearchPosts page.  The page is for users who want to 
+ * search for posts with a keyword that they select. We decided a new view would be good for this because
+ * it offers a nice separation of concerns.
+ * </p>
+ * 
+ * @author of the JavaDoc: Blake Ranniker
+ */
+
 public class ViewSearchPosts {
 
+	/*-*******************************************************************************************
+
+	Attributes
+	
+	 */
+	
+	// These are the application values required by the user interface
     private static double width = applicationMain.FoundationsMain.WINDOW_WIDTH;
     private static double height = applicationMain.FoundationsMain.WINDOW_HEIGHT;
 
+    //These are the widgets for the GUI. There are two main areas and the back to home button on the top.
+    protected static Button button_Back = new Button("Back to Home");
+    
+    //This is the top area in between the two lines. This is where users enter search keywords and press search.
     protected static Label label_PageTitle = new Label("Search Posts");
     protected static Label label_SearchPrompt = new Label("Enter search keyword:");
     protected static TextField textField_Search = new TextField();
     protected static Button button_Search = new Button("Search");
-    protected static Button button_Back = new Button("Back to Home");
     protected static Label label_Results = new Label("Enter a keyword to search across all posts");
     
+    //This is the bottom area in the GUI. This is where the results show up when they are received.
     protected static ScrollPane scrollPane_Results = new ScrollPane();
     protected static VBox vbox_Results = new VBox(10);
     
+    //Line separators to keep GUi areas separate.
     protected static Line line_Separator1 = new Line(20, 95, width-20, 95);
     protected static Line line_Separator2 = new Line(20, 170, width-20, 170);
+    //This is the end of GUI objects for the page.
 
+    // These attributes are used to configure the page and populate it with this user's information
     private static Database theDatabase = applicationMain.FoundationsMain.database;
     private static Stage theStage;
     private static Pane theRootPane;
     private static User theUser;
     private static Scene theScene;
 
+    /*-*******************************************************************************************
+
+	Constructors
+	
+	 */
+
+
+	/**********
+	 * <p> Method: displaySearchPosts(Stage ps, User user) </p>
+	 * 
+	 * <p> Description: This method is the single entry point from outside this package to cause
+	 * the Search Posts View to be displayed.
+	 * 
+	 * It first sets up every shared attributes so we don't have to pass parameters.
+	 * 
+	 * It then checks to see if the page has been setup.  If not, it instantiates the class, 
+	 * initializes all the static aspects of the GIUI widgets (e.g., location on the page, font,
+	 * size, and any methods to be performed).
+	 * 
+	 * After the instantiation, the code then populates the elements that change based on the user
+	 * and the system's current state.  It then sets the Scene onto the stage, and makes it visible
+	 * to the user.
+	 * 
+	 * @param ps specifies the JavaFX Stage to be used for this GUI and it's methods
+	 * 
+	 * @param user specifies the User for this GUI and it's methods
+	 * 
+	 */
     public static void displaySearchPosts(Stage ps, User user) {
         theStage = ps;
         theUser = user;
@@ -57,6 +110,17 @@ public class ViewSearchPosts {
         theStage.show();
     }
 
+    /**********
+	 * <p> Method: setupUI() </p>
+	 * 
+	 * <p> Description: This method initializes all the elements of the graphical user interface.
+	 * This method determines the location, size, font, color, and change and event handlers for
+	 * each GUI object.</p>
+	 * 
+	 * This is a singleton and is only performed once.  Subsequent uses fill in the changeable
+	 * fields using the view editor methods.</p>
+	 * 
+	 */
     private static void setupUI() {
         // Header
         setupLabelUI(label_PageTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
@@ -108,9 +172,17 @@ public class ViewSearchPosts {
             textField_Search, button_Search, line_Separator2, label_Results, scrollPane_Results);
     }
 
+    /**********
+	 * <p> Method: performSearch() </p>
+	 * 
+	 * <p> Description: This method performs a search given the keyword from the text box
+	 * It queries the database for a list of posts matching the keyword, then displays them.
+	 * </p> 
+	 */
     private static void performSearch() {
         String keyword = textField_Search.getText().trim();
         
+        //If there is no keyword, display a warning
         if (keyword.isEmpty()) {
             label_Results.setText("Please enter a search keyword");
             label_Results.setTextFill(Color.RED);
@@ -158,8 +230,17 @@ public class ViewSearchPosts {
         }
     }
 
+    /**********
+	 * <p> Method: createSearchBoxResultItem() </p>
+	 * 
+	 * <p> Description: This method creates a new box for a post to be displayed in..</p>
+	 * 
+	 *  @param post is the post to be displayed
+	 *  @param currentUserID is the userID of the person performing the search.
+	 */
     private static VBox createSearchResultItem(Post post, int currentUserID) {
-        VBox postBox = new VBox(8);
+        //Create and set up the GUI box.
+    	VBox postBox = new VBox(8);
         postBox.setPadding(new Insets(15));
         postBox.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; " +
                          "-fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
@@ -219,6 +300,23 @@ public class ViewSearchPosts {
         return postBox;
     }
 
+    /*-********************************************************************************************
+
+	Helper methods to reduce code length
+
+	 */
+	
+	/**********
+	 * Private local method to initialize the standard fields for a label
+	 * 
+	 * @param l		The Label object to be initialized
+	 * @param ff	The font to be used
+	 * @param f		The size of the font to be used
+	 * @param w		The width of the Button
+	 * @param p		The alignment (e.g. left, centered, or right)
+	 * @param x		The location from the left edge (x axis)
+	 * @param y		The location from the top (y axis)
+	 */
     private static void setupLabelUI(Label l, String ff, double f, double w, Pos p, double x, double y){
         l.setFont(Font.font(ff, f));
         l.setMinWidth(w);
@@ -227,6 +325,17 @@ public class ViewSearchPosts {
         l.setLayoutY(y);
     }
 
+    /**********
+	 * Private local method to initialize the standard fields for a button
+	 * 
+	 * @param b		The Button object to be initialized
+	 * @param ff	The font to be used
+	 * @param f		The size of the font to be used
+	 * @param w		The width of the Button
+	 * @param p		The alignment (e.g. left, centered, or right)
+	 * @param x		The location from the left edge (x axis)
+	 * @param y		The location from the top (y axis)
+	 */
     private static void setupButtonUI(Button b, String ff, double f, double w, Pos p, double x, double y){
         b.setFont(Font.font(ff, f));
         b.setMinWidth(w);
