@@ -256,7 +256,7 @@ public class Database {
 	 */
 	public List<String> getAllThreads() {
 	    List<String> threads = new ArrayList<>();
-	    String query = "SELECT DISTINCT thread FROM Posts WHERE isDeleted = FALSE ORDER BY thread";
+	    String query = "SELECT DISTINCT thread FROM Posts ORDER BY thread";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        ResultSet rs = pstmt.executeQuery();
 	        while (rs.next()) {
@@ -280,7 +280,7 @@ public class Database {
 	 * @throws SQLException when there is an issue with the database query
 	 */
 	public Post getPostByID(int postID) throws SQLException {
-	    String query = "SELECT * FROM Posts WHERE postID = ? AND isDeleted = FALSE";
+	    String query = "SELECT * FROM Posts WHERE postID = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setInt(1, postID);
 	        ResultSet rs = pstmt.executeQuery();
@@ -488,7 +488,7 @@ public class Database {
 	 */
 	public List<Post> getAllPostsByThread(String thread) throws SQLException {
 	    List<Post> posts = new ArrayList<>();
-	    String query = "SELECT * FROM Posts WHERE thread = ? AND isDeleted = FALSE ORDER BY timestamp DESC";
+	    String query = "SELECT * FROM Posts WHERE thread = ? ORDER BY timestamp DESC";
 	    
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setString(1, thread);
@@ -544,17 +544,28 @@ public class Database {
 	    }
 	    return posts;
 	}
-
+ 
 	/*******
 	 * <p> Method: softDeletePost </p>
 	 * 
-	 * <p> Description: Soft deletes a post by marking it as deleted and changing content.</p>
+	 * <p> Description: Soft deletes a post by changing the post content.</p>
 	 * 
 	 * @param postID the ID of the post to delete
 	 * 
 	 * @throws SQLException when there is an issue with the database operation
 	 */
 	public void softDeletePost(int postID) throws SQLException {
+	    String updatePost = "UPDATE Posts SET postContent = ?, isDeleted = True WHERE postID = ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(updatePost)) {
+	        pstmt.setString(1, "This post was deleted by the user.");
+	        pstmt.setInt(2, postID);
+	        pstmt.executeUpdate();
+	    }
+	}
+	
+
+	/* Possible Hard Delete Post
+	public void hardDeletePost(int postID) throws SQLException {
 	    String updatePost = "UPDATE Posts SET isDeleted = TRUE, postContent = ? WHERE postID = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(updatePost)) {
 	        pstmt.setString(1, "This post was deleted by the user.");
@@ -562,6 +573,7 @@ public class Database {
 	        pstmt.executeUpdate();
 	    }
 	}
+	 */
 	
 	/*******
 	 * <p> Method: deleteReply </p>
@@ -622,7 +634,7 @@ public class Database {
 	 */
 	public List<Post> getPostsByUser(int userID, String thread) throws SQLException {
 	    List<Post> posts = new ArrayList<>();
-	    String query = "SELECT * FROM Posts WHERE userID = ? AND thread = ? AND isDeleted = FALSE ORDER BY timestamp DESC";
+	    String query = "SELECT * FROM Posts WHERE userID = ? AND thread = ? ORDER BY timestamp DESC";
 	    
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        pstmt.setInt(1, userID);
@@ -690,6 +702,7 @@ public class Database {
 
 
 
+	
 /*******
  * <p> Method: isDatabaseEmpty </p>
  * 
