@@ -26,7 +26,7 @@ import java.util.List;
  * it offers a nice separation of concerns.
  * </p>
  * 
- * @author of the JavaDoc: Blake Ranniker
+ * @author Blake Ranniker (Documentation), Arjun Rajesh Korath (Code)
  */
 
 public class ViewSearchPosts {
