@@ -126,6 +126,8 @@ public class ViewPostDetail {
         try {
             // Get post from database
             currentPost = getPostByID(currentPostID);
+            
+            // For hardDelete
             if (currentPost == null) {
                 Label errorLabel = new Label("Post not found.");
                 errorLabel.setFont(Font.font("Arial", 16));

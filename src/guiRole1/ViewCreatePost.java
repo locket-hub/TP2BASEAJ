@@ -100,6 +100,8 @@ public class ViewCreatePost {
 
         String thread = textField_Thread.getText().trim();
         String content = textArea_Content.getText().trim();
+        textField_Thread.clear();
+        textArea_Content.clear();
 
         // Validation
         if (thread.isEmpty()) {
