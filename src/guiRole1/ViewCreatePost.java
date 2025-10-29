@@ -166,7 +166,6 @@ public class ViewCreatePost {
 
         String thread = combobox_SelectThread.getValue();
         String content = textArea_Content.getText().trim();
-        textField_Thread.clear();
         textArea_Content.clear();
 
         // Validation
