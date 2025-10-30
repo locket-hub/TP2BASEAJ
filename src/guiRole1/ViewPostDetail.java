@@ -19,6 +19,18 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+/*******
+ * <p> Title: ViewPostDetail Class. </p>
+ * 
+ * <p> Description: The Java/FX-based View Post Detail Page. This page is for users who want to 
+ *     view a post details and replies. We decided a new view would be good for this because
+ *     it offers a nice separation of concerns. <p>
+ * 
+ * 
+ * @author team37
+ * 
+ *  
+ */
 public class ViewPostDetail {
 
     private static double width = applicationMain.FoundationsMain.WINDOW_WIDTH;
@@ -46,6 +58,19 @@ public class ViewPostDetail {
     private static Post currentPost;
     private static int currentPostID;
 
+	/**********
+	 * <p> Method: displayPostDetail(Stage ps, User user, int postID) </p>
+	 * 
+	 * <p> Description: This method takes a Stage, User, and unique postID to 
+	 *     display the post & its replies. </p>
+	 * 
+     * @param ps specifies the container for the gui
+     * 
+     * @param user specifies the individual user who this specific interface is tailored
+     * 
+     * @param postID specifies the unique ID of the post whose replies and details are to be shown
+	 * 
+	 */
     public static void displayPostDetail(Stage ps, User user, int postID) {
         theStage = ps;
         theUser = user;
@@ -62,6 +87,14 @@ public class ViewPostDetail {
         theStage.show();
     }
 
+	/**********
+	 * <p> Method: setupUI() </p>
+	 * 
+	 * <p> Description: This method handles the UI elements: buttons, panes, and inputs
+	 * 	   for those functions. </p>
+	 * 
+	 * 
+	 */
     private static void setupUI() {
         // Header
         setupLabelUI(label_PageTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
@@ -120,6 +153,15 @@ public class ViewPostDetail {
             line_Separator1, scrollPane_Content, line_Separator2, button_DeletePost, button_EditPost);
     }
 
+	/**********
+	 * <p> Method: loadPostAndReplies() </p>
+	 * 
+	 * <p> Description: This method takes the user and postID data to display the selected post, and
+	 * 	   whether some functions and content are visible. Creates the area for the posts and replies.
+	 * 	   Handles listing of replies and scroll functionality.  </p>
+	 * 
+	 * 
+	 */
     private static void loadPostAndReplies() {
         vbox_Content.getChildren().clear();
 
@@ -193,11 +235,29 @@ public class ViewPostDetail {
         }
     }
 
+	/**********
+	 * <p> Method: getPostByID(int postID) </p>
+	 * 
+	 * <p> Description: This method takes a unique postID and returns a Post object. </p>
+     * 
+     * @param postID specifies the unique ID of the post
+     * 
+     * @return theDatabase.getPostByID(postID): a Post object
+	 * 
+	 */
     private static Post getPostByID(int postID) throws SQLException {
         return theDatabase.getPostByID(postID);
 
     }
     
+	/**********
+	 * <p> Method: showDeleteConfirmation() </p>
+	 * 
+	 * <p> Description: This method takes the buttonDeleteButton input call from setupUI to 
+	 *     display an alert that warns the user about deleting a post. </p>
+	 * 
+	 * 
+	 */
     private static void showDeleteConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Post");
@@ -228,7 +288,16 @@ public class ViewPostDetail {
             }
         });
     }
-
+	/**********
+	 * <p> Method: createPostDisplay(Post post) </p>
+	 * 
+	 * <p> Description: This method sets up postBox containing the threadLabel, authorName, 
+	 * 	   metadataLabel, timestampData, & contentText. </p>
+	 * 
+     * @param post specifies the specific post object to be displayed
+     * 
+	 * 
+	 */
     private static VBox createPostDisplay(Post post) {
         VBox postBox = new VBox(10);
         postBox.setPadding(new Insets(15));
@@ -257,6 +326,15 @@ public class ViewPostDetail {
         return postBox;
     }
     
+	/**********
+	 * <p> Method: showReplyDialog() </p>
+	 * 
+	 * <p> Description: This method handles add reply input: the add reply button, the submit button, 
+	 * 	   the prompt text, and get reply content text. When successful, it sends resulting text to addReplyToDatabase and
+	 *     loadPostAndReplies refresh. </p>
+     * 
+	 * 
+	 */
     private static void showReplyDialog() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Add Reply");
@@ -300,6 +378,17 @@ public class ViewPostDetail {
         });
     }
     
+	/**********
+	 * <p> Method: showEditReplyDialog(Reply reply) </p>
+	 * 
+	 * <p> Description: This method handles the edit reply input: the edit reply button, save button, 
+	 *     the prompt text, and get reply content text. When successful, it sends resulting text to 
+	 *     updateReplyContent and loadPostAndReplies. </p>
+	 * 
+     * @param reply specifies the specific reply object to be displayed.
+     * 
+	 * 
+	 */
     private static void showEditReplyDialog(Reply reply) {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Edit Reply");
@@ -355,7 +444,16 @@ public class ViewPostDetail {
         });
     }
 
-
+	/**********
+	 * <p> Method: createReplyDisplay(Post post) </p>
+	 * 
+	 * <p> Description: This method sets up replyBox containing the author name, timestamp data, 
+	 *     and content text. Handles visibility of edit and delete button to individual users. </p>
+	 * 
+     * @param reply specifies the specific reply object to be displayed
+     * 
+	 * 
+	 */
     private static VBox createReplyDisplay(Reply reply) {
         VBox replyBox = new VBox(5);
         replyBox.setPadding(new Insets(10, 10, 10, 20));
@@ -402,7 +500,15 @@ public class ViewPostDetail {
     }
 
    
-    
+	/**********
+	 * <p> Method: showEditPostDialog(Reply reply) </p>
+	 * 
+	 * <p> Description: This method handles the edit post input: the edit post button, save button, 
+	 *     the prompt text, and get post content function. When successful, it sends resulting text to 
+	 *     updatePostContent and loadPostAndReplies. </p>
+     * 
+	 * 
+	 */
     private static void showEditPostDialog() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Edit Post");
@@ -458,10 +564,12 @@ public class ViewPostDetail {
         });
     }
 
-    /**
-     * Displays a confirmation dialog for deleting a reply owned by the current user.
+	/**********
+	 * <p> Method: showDeleteReplyConfirmation(Reply reply) </p>
+	 * 
+	 * <p> Description: This method displays a confirmation dialog for deleting a reply owned by the current user.
      * If confirmed, permanently removes the reply from the database and refreshes
-     * the replies display.
+     * the replies display. <p>
      *
      * @param reply the Reply object to be deleted
      */
@@ -495,10 +603,40 @@ public class ViewPostDetail {
         });
     }
 
+	/**********
+	 * <p> Method: addReplyToDatabase(int postID, int userID, String content) </p>
+	 * 
+	 * <p> Description: This method sends reply data to insertReply method in the database. <p>
+     *
+     * @param postID specifies the unique postID number of the post
+     * 
+     * @param userID specifies the unique userID number of the post's user
+     * 
+     * @param content specifies the content text of the post's content
+     */
     private static void addReplyToDatabase(int postID, int userID, String content) throws SQLException {
     	theDatabase.insertReply(postID, userID, content);
     }
-
+    
+	/**********
+	 * <p> Method: setupLabelUI(Label l, String ff, double f, double w, Pos p, double x, double y) </p>
+	 * 
+	 * <p> Description: This method is composed of setters that streamline label setup . <p>
+     *
+     * @param l specifies the label name
+     * 
+     * @param ff specifies the label text
+     * 
+     * @param f specifies the label font size
+     * 
+     * @param w specifies the minimum width of the label
+     * 
+     * @param p specifies the alignment of the label
+     * 
+     * @param x specifies the position of the label on the x axis
+     * 
+     * @param y specifies the position of the label on the y axis
+     */
     private static void setupLabelUI(Label l, String ff, double f, double w, Pos p, double x, double y){
         l.setFont(Font.font(ff, f));
         l.setMinWidth(w);
@@ -507,6 +645,25 @@ public class ViewPostDetail {
         l.setLayoutY(y);
     }
 
+	/**********
+	 * <p> Method: setupButtonUI(Label b, String ff, double f, double w, Pos p, double x, double y) </p>
+	 * 
+	 * <p> Description: This method is composed of setters that streamline button setup . <p>
+     *
+     * @param b specifies the button name
+     * 
+     * @param ff specifies the button text
+     * 
+     * @param f specifies the button font size
+     * 
+     * @param w specifies the minimum width of the button
+     * 
+     * @param p specifies the alignment of the button
+     * 
+     * @param x specifies the position of the button on the x axis
+     * 
+     * @param y specifies the position of the button on the y axis
+     */
     private static void setupButtonUI(Button b, String ff, double f, double w, Pos p, double x, double y){
         b.setFont(Font.font(ff, f));
         b.setMinWidth(w);
