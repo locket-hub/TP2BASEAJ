@@ -38,10 +38,7 @@ import guiUserUpdate.ViewUserUpdate;
  * 
  * <p> Copyright: Lynn Robert Carter © 2025 </p>
  * 
- * @author Lynn Robert Carter
- * 
- * @version 1.00		2025-08-20 Initial version
- *  
+ * @author Blake Ranniker (Documentation), Arjun Rajesh Korath (Code)
  */
 
 public class ViewRole1Home {
@@ -312,18 +309,15 @@ public class ViewRole1Home {
         		 vert_line_seperator, line_Separator1, button_Search, line_Separator4,
                  button_Logout, button_Quit, label_ThreadsTitle, listView_Threads,
                  radio_AllPosts, radio_ReadPosts, radio_UnreadPosts, radio_MyPosts, listView_Posts);
-}
+	}
 	
-	
-	/*-********************************************************************************************
-
-	Helper methods to reduce code length
-
+	/**
+	 * <p>Method: loadPosts()</p>
+	 * 
+	 * <p>Description: This method loads the posts that the user is going to see in the page. It checks for filters and
+	 * displays posts based on those filters.
+	 * </p>
 	 */
-	
-	 /**
-     * Load posts based on selected thread and filter
-     */
     private static void loadPosts() {
         listView_Posts.getItems().clear();
         
@@ -359,6 +353,13 @@ public class ViewRole1Home {
         }
     }
 	
+    /**
+	 * <p>Method: loadThreads()</p>
+	 * 
+	 * <p>Description: This method loads the threads that the user is going to see in the page on the left hand side.
+	 * As of right now, it should just be "General."
+	 * </p>
+	 */
     private static void loadThreads() {
         listView_Threads.getItems().clear();
         List<String> threads = theDatabase.getAllThreads();
@@ -373,6 +374,18 @@ public class ViewRole1Home {
 	
     }
 	
+    /**
+	 * <p>Method: createPostListItem()</p>
+	 * 
+	 * <p>Description: This method takes a post and a user ID and creates an HBox with the post content.
+	 * It checks the DB to see if the post is read by the current user.
+	 * </p>
+	 * 
+	 * @param post is the post that is being added to the list.
+	 * @param currentUserID is the ID of the current user.
+	 * 
+	 * @return HBox to be added to the list of posts.
+	 */
     private static HBox createPostListItem(Post post, int currentUserID) {
         HBox postBox = new HBox(10);
         postBox.setPadding(new Insets(10));
@@ -425,6 +438,13 @@ public class ViewRole1Home {
         
         return postBox;
     }
+    
+    /*-********************************************************************************************
+
+	Helper methods to reduce code length
+
+	 */
+    
 	/**********
 	 * Private local method to initialize the standard fields for a label
 	 * 
